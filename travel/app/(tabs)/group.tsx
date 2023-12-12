@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const group = () => {
+const Page = () => {
   return (
     <View>
       <Text>group</Text>
@@ -9,4 +9,4 @@ const group = () => {
   )
 }
 
-export default group
+export default Page

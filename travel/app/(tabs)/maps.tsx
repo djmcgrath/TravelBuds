@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const maps = () => {
+const Page = () => {
   return (
     <View>
       <Text>maps</Text>
@@ -9,4 +9,4 @@ const maps = () => {
   )
 }
 
-export default maps
+export default Page

@@ -12,10 +12,10 @@ const Layout = () => {
             fontFamily: "mon-sb",
         },
     }}>
-        <Tabs.Screen name='maps' options={{
-            tabBarLabel: "Maps",
+        <Tabs.Screen name='index' options={{
+            tabBarLabel: "Profile",
             tabBarIcon: ({ color, size}) => 
-            <MaterialCommunityIcons name='map-marker-radius-outline' color={color} size={size}/>
+            <MaterialCommunityIcons name='account' color={color} size={size}/>
         }}
         />
         <Tabs.Screen name='group' options={{
@@ -30,10 +30,10 @@ const Layout = () => {
             <MaterialCommunityIcons name='account-group-outline' color={color} size={size}/>
         }}
         />
-        <Tabs.Screen name='profile' options={{
-            tabBarLabel: "Profile",
+        <Tabs.Screen name='maps' options={{
+            tabBarLabel: "Maps",
             tabBarIcon: ({ color, size}) => 
-            <MaterialCommunityIcons name='account' color={color} size={size}/>
+            <MaterialCommunityIcons name='map-marker-radius-outline' color={color} size={size}/>
         }}
         />
     </Tabs>
