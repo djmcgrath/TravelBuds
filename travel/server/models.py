@@ -38,8 +38,8 @@ class User(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user_groups = db.relationship("UserGroup", back_populates="users")
-    follows = db.relationship("Follower", back_populates="follower", foreign_keys="Follower.following_user_id", cascade="all, delete-orphan")
-    followed_by = db.relationship("Follower", back_populates="following", foreign_keys="Follower.followed_user_id", cascade="all, delete-orphan")
+    follows = db.relationship("Follower", back_populates="follower", foreign_keys="Follower.following_user_id")
+    followed_by = db.relationship("Follower", back_populates="following", foreign_keys="Follower.followed_user_id")
 
     serialize_rules = ('-user_groups.users', "-follows.follower", "-followed_by.following", )
 
@@ -75,8 +75,8 @@ class Group(db.Model, SerializerMixin):
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-    user_groups = db.relationship("UserGroup", back_populates="groups", cascade="all, delete-orphan")
-    posts = db.relationship("Post", back_populates="group_post", cascade="all, delete-orphan")
+    user_groups = db.relationship("UserGroup", back_populates="groups")
+    posts = db.relationship("Post", back_populates="group_post")
 
     serialize_rules = ('-posts.group_post', "-user_groups.groups",)
 
@@ -88,7 +88,7 @@ class Post(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     body = db.Column(db.String)
-    liker = db.Column(db.Boolean)
+    liker = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     group_post = db.relationship("Group", back_populates="posts")
