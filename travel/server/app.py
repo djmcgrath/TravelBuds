@@ -6,6 +6,7 @@ from flask_restful import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
+
 # Local imports
 from models import *
 
@@ -182,7 +183,7 @@ api.add_resource(GroupsById, "/groups/<int:id>")
 
 class Posts(Resource):
     def get(self):
-        post_list = [posts.to_dict() for posts in Post.query.all()]
+        post_list = [posts.to_dict(rules = ("-group_post",)) for posts in Post.query.all()]
         return post_list, 200
     
     def post(self):
@@ -196,7 +197,7 @@ class Posts(Resource):
             db.session.add(new_post)
             db.session.commit()
 
-            return new_post.to_dict(), 201
+            return new_post.to_dict(rules = ("-group_post",)), 201
         
         except ValueError as e:
             print(e.__str__())
@@ -209,7 +210,7 @@ class PostsById(Resource):
         posts = Post.query.filter_by(id = id).first()
         if not posts:
             return {"error": "Post not found"}, 404
-        return posts.to_dict(), 200
+        return posts.to_dict(rules = ("-group_post",)), 200
     
     def patch(self, id):
         posts = Post.query.filter_by(id = id).first()
@@ -221,7 +222,7 @@ class PostsById(Resource):
             for key in data:
                 setattr(posts, key, data[key])
             db.session.commit()
-            return posts.to_dict(), 202
+            return posts.to_dict(rules = ("-group_post",)), 202
         
         except ValueError as e:
             print(e.__str__())
@@ -237,3 +238,6 @@ class PostsById(Resource):
         return "", 204
         
 api.add_resource(PostsById, "/posts/<int:id>")
+
+if __name__ == '__main__':
+    app.run(port=5555, debug=True)
