@@ -55,6 +55,7 @@ class User(db.Model, SerializerMixin):
 class UserGroup(db.Model, SerializerMixin):
     __tablename__ = "user_group"
     id = db.Column(db.Integer, primary_key=True)
+    user_group_number = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -74,8 +75,8 @@ class Group(db.Model, SerializerMixin):
     post_id = db.Column(db.Integer, db.ForeignKey("post.id"), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
-    user_groups = db.relationship("UserGroup", back_populates="groups")
-    posts = db.relationship("Post", back_populates="group_post")
+    user_groups = db.relationship("UserGroup", back_populates="groups", cascade="all, delete-orphan")
+    posts = db.relationship("Post", back_populates="group_post", cascade="all, delete-orphan")
 
     serialize_rules = ('-posts.group_post', "-user_groups.groups",)
 
