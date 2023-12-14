@@ -14,6 +14,7 @@ const Layout = () => {
     }}>
         <Tabs.Screen name='index' options={{
             tabBarLabel: "Profile",
+            headerShown: false,
             tabBarIcon: ({ color, size}) => 
             <MaterialCommunityIcons name='account' color={color} size={size}/>
         }}
