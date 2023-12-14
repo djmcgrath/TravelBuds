@@ -13,7 +13,7 @@ enum Strategy {
     Apple = "oauth_apple",
 }
 
-const login = () => {
+const Page = () => {
   
   usWarmUpBrowser()
 
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default login
+export default Page
