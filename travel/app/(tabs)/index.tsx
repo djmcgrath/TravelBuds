@@ -1,3 +1,5 @@
+// PROFILE PAGE
+
 import {
   View,
   Text,

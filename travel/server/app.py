@@ -32,7 +32,7 @@ CORS(app)
 
 class Users(Resource):
     def get(self):
-        user_list = [users.to_dict() for users in User.query.all()]
+        user_list = [users.to_dict(rules =("-followed_by", "-follows", "-user_groups", "-created_at",)) for users in User.query.all()]
         return user_list, 200
     
     def post(self):
@@ -127,7 +127,7 @@ api.add_resource(UserGroupsById, "/usergroups/<int:id>")
 
 class Groups(Resource):
     def get(self):
-        group_list = [groups.to_dict() for groups in Group.query.all()]
+        group_list = [groups.to_dict(rules =("-user_groups", "-created_at",)) for groups in Group.query.all()]
         return group_list, 200
     
     def post(self):
