@@ -25,7 +25,7 @@ const Layout = () => {
         }}
         />
         <Tabs.Screen name='user_group' options={{
-            tabBarLabel: "Your Groups",
+            tabBarLabel: "All Groups",
             tabBarIcon: ({ color, size}) => 
             <MaterialCommunityIcons name='account-group-outline' color={color} size={size}/>
         }}
