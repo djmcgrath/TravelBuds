@@ -1,5 +1,6 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { defaultStyles } from '../../constants/Styles'
 
 const Page = () => {
 
@@ -16,9 +17,9 @@ const Page = () => {
   let groupList = group.map((groupItem) => groupItem['group_name'])
 
   return (
-    <View>
+    <SafeAreaView style={defaultStyles.container}>
       <Text>{groupList}</Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

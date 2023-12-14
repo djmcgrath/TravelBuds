@@ -1,11 +1,12 @@
-import { View, Text } from 'react-native'
+import { View, Text, SafeAreaView } from 'react-native'
 import React from 'react'
+import { defaultStyles } from '../../constants/Styles'
 
 const Page = () => {
   return (
-    <View>
+    <SafeAreaView style={defaultStyles.container}>
       <Text>user_group</Text>
-    </View>
+    </SafeAreaView>
   )
 }
 
