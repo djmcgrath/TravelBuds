@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, useRouter } from 'expo-router';
+import { SplashScreen, Stack, useRouter, Slot, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
@@ -69,13 +69,28 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const router = useRouter()
+  const segments = useSegments();
   const { isLoaded, isSignedIn } = useAuth()
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push('/(modals)/login')
+      router.replace('/login')
     }
   }, [isLoaded])
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const inTabsGroup = segments[0] === '(auth)';
+
+    console.log('User changed: ', isSignedIn);
+
+    if (isSignedIn && !inTabsGroup) {
+      router.replace('/group');
+    } else if (!isSignedIn) {
+      router.replace('/login');
+    }
+  }, [isSignedIn]);
 
   return (
       <Stack>

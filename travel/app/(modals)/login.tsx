@@ -1,12 +1,13 @@
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Button, Alert, Pressable } from 'react-native'
+import React, { useState } from 'react'
 import { usWarmUpBrowser } from '../../hooks/useWarmUpBrowser'
 import { TextInput } from 'react-native'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
-import { useOAuth } from '@clerk/clerk-expo'
-import { useRouter } from 'expo-router'
+import { useOAuth, useSignIn } from '@clerk/clerk-expo'
+import { useRouter, Link } from 'expo-router'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 enum Strategy {
     Google = "oauth_google",
@@ -20,6 +21,32 @@ const Page = () => {
   const router = useRouter()
   const { startOAuthFlow: googleAuth } = useOAuth({strategy: "oauth_google"})
   const { startOAuthFlow: appleAuth } = useOAuth({strategy: "oauth_apple"})
+
+  const { signIn, setActive, isLoaded } = useSignIn();
+
+  const [emailAddress, setEmailAddress] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const onSignInPress = async () => {
+    if (!isLoaded) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const completeSignIn = await signIn.create({
+        identifier: emailAddress,
+        password,
+      });
+
+      // This indicates the user is signed in
+      await setActive({ session: completeSignIn.createdSessionId });
+    } catch (err: any) {
+      alert(err.errors[0].message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   const onSelectAuth = async (strategy: Strategy) => {
     const seletedAuth = {
@@ -41,10 +68,23 @@ const Page = () => {
 
   return (
     <View style={styles.container}>
-        <TextInput autoCapitalize='none' placeholder='Email' style={[defaultStyles.inputField, {marginBottom: 30}]}/>
-        <TouchableOpacity style={defaultStyles.btn}>
-            <Text style={defaultStyles.btnText}>Continue</Text>
-        </TouchableOpacity>
+        <Spinner visible={loading} />
+
+            <TextInput autoCapitalize="none" placeholder="email@gmail.com" value={emailAddress} onChangeText={setEmailAddress} style={defaultStyles.inputField} />
+            <TextInput placeholder="password" value={password} onChangeText={setPassword} secureTextEntry style={defaultStyles.inputField} />
+
+            <Button onPress={onSignInPress} title="Login" color={'#6c47ff'}></Button>
+
+            <Link href="/reset" asChild>
+            <Pressable style={styles.btnOutline}>
+                <Text style={styles.btnOutlineText}>Forgot password?</Text>
+            </Pressable>
+            </Link>
+            <Link href="/register" asChild>
+            <Pressable style={styles.btnOutline}>
+                <Text style={styles.btnOutlineText}>Create Account</Text>
+            </Pressable>
+            </Link>
         <View style={styles.seperatorView}>
             <View style={{
                 flex: 1,
@@ -60,15 +100,11 @@ const Page = () => {
         </View>
 
         <View style={{ gap: 20 }}>
-            <TouchableOpacity style={styles.btnOutline}>
-                <Ionicons name='call-outline' style={[defaultStyles.btnIcon]} size={24}/>
-                <Text style={styles.btnOutlineText}>Continue with Phone</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Google)}>
+            <TouchableOpacity style={styles.btnOutlineClerk} onPress={() => onSelectAuth(Strategy.Google)}>
                 <Ionicons name='md-logo-google' style={[defaultStyles.btnIcon]} size={24}/>
                 <Text style={styles.btnOutlineText}>Continue with Google</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.btnOutline} onPress={() => onSelectAuth(Strategy.Apple)}>
+            <TouchableOpacity style={styles.btnOutlineClerk} onPress={() => onSelectAuth(Strategy.Apple)}>
                 <Ionicons name='md-logo-apple' style={[defaultStyles.btnIcon]} size={24}/>
                 <Text style={styles.btnOutlineText}>Continue with Apple</Text>
             </TouchableOpacity>
@@ -94,7 +130,18 @@ const styles = StyleSheet.create({
         color: Colors.grey,
     },
     btnOutline: {
-        backgroundColor: "#fff",
+        backgroundColor: "#9370DB",
+        borderWidth: 1,
+        borderColor: Colors.grey,
+        height: 50,
+        borderRadius: 8,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+    },
+    btnOutlineClerk: {
+        backgroundColor: "#C71585",
         borderWidth: 1,
         borderColor: Colors.grey,
         height: 50,

@@ -40,8 +40,7 @@ class Users(Resource):
         try:
             new_user = User(
                 first_name = data["first_name"],
-                last_name = data["last_name"],
-                group_leader = data["group_leader"]
+                last_name = data["last_name"]
             )
             db.session.add(new_user)
             db.session.commit()
