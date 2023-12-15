@@ -110,6 +110,18 @@ function RootLayoutNav() {
             ),
           }}
         />
+        <Stack.Screen
+          name="(modals)/register"
+          options={{
+            headerTitle: 'Create Account',
+          }}
+        />
+        <Stack.Screen
+          name="(modals)/reset"
+          options={{
+              headerTitle: 'Reset Password',
+            }}
+        />
       </Stack>
   
   );
