@@ -47,7 +47,7 @@ const PwReset = () => {
 
       {!successfulCreation && (
         <>
-          <TextInput autoCapitalize="none" placeholder="simon@galaxies.dev" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} />
+          <TextInput autoCapitalize="none" placeholder="email@gmail.com" value={emailAddress} onChangeText={setEmailAddress} style={styles.inputField} />
 
           <Button onPress={onRequestReset} title="Send Reset Email" color={'#6c47ff'}></Button>
         </>

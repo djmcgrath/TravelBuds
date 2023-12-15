@@ -69,22 +69,26 @@ const Page = () => {
   return (
     <View style={styles.container}>
         <Spinner visible={loading} />
+            <View style={{gap: 20}}>
+                <TextInput autoCapitalize="none" placeholder="email@gmail.com" value={emailAddress} onChangeText={setEmailAddress} style={defaultStyles.inputField} />
+                <TextInput placeholder="password" value={password} onChangeText={setPassword} secureTextEntry style={defaultStyles.inputField} />
 
-            <TextInput autoCapitalize="none" placeholder="email@gmail.com" value={emailAddress} onChangeText={setEmailAddress} style={defaultStyles.inputField} />
-            <TextInput placeholder="password" value={password} onChangeText={setPassword} secureTextEntry style={defaultStyles.inputField} />
+                <TouchableOpacity style={styles.btnOutline} onPress={onSignInPress}>
+                    <Text style={styles.btnOutlineText}>Login</Text>
+                </TouchableOpacity>
+                {/* <Button onPress={onSignInPress} title="Login" color={'#6c47ff'}></Button> */}
 
-            <Button onPress={onSignInPress} title="Login" color={'#6c47ff'}></Button>
-
-            <Link href="/reset" asChild>
-            <Pressable style={styles.btnOutline}>
-                <Text style={styles.btnOutlineText}>Forgot password?</Text>
-            </Pressable>
-            </Link>
-            <Link href="/register" asChild>
-            <Pressable style={styles.btnOutline}>
-                <Text style={styles.btnOutlineText}>Create Account</Text>
-            </Pressable>
-            </Link>
+                <Link href="/reset" asChild>
+                    <Pressable style={styles.btnOutline}>
+                        <Text style={styles.btnOutlineText}>Forgot password?</Text>
+                    </Pressable>
+                </Link>
+                <Link href="/register" asChild>
+                    <Pressable style={styles.btnOutline}>
+                        <Text style={styles.btnOutlineText}>Create Account</Text>
+                    </Pressable>
+                </Link>
+            </View>
         <View style={styles.seperatorView}>
             <View style={{
                 flex: 1,
