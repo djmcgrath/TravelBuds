@@ -15,21 +15,18 @@ const Page = () => {
     .then((data) => {setGroup(data)})
   }, [])
 
-  let groupList = group.map((groupItem) => groupItem['group_name'])
+  console.log(group)
+
+  let groupList = group?.map((groupItem: any) => {
+    return (
+        <Text key={groupItem["id"]} style={styles.card}> {groupItem["group_name"]!}</Text>
+    )
+  })
 
   return (
     <SafeAreaView style={defaultStyles.container}>
       <ScrollView style={styles.container}>
-        <Text style={styles.card}>{groupList[0]}</Text>
-        <Text style={styles.card}>{groupList[1]}</Text>
-        <Text style={styles.card}>{groupList[2]}</Text>
-        <Text style={styles.card}>{groupList[3]}</Text>
-        <Text style={styles.card}>{groupList[4]}</Text>
-        <Text style={styles.card}>{groupList[0]}</Text>
-        <Text style={styles.card}>{groupList[1]}</Text>
-        <Text style={styles.card}>{groupList[2]}</Text>
-        <Text style={styles.card}>{groupList[3]}</Text>
-        <Text style={styles.card}>{groupList[4]}</Text>
+        {groupList}
       </ScrollView>
     </SafeAreaView>
   )

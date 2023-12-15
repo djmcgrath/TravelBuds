@@ -29,6 +29,8 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
 
   const onSignInPress = async () => {
+    console.log("pressed")
+    console.log(isLoaded)
     if (!isLoaded) {
       return;
     }
@@ -59,7 +61,7 @@ const Page = () => {
 
         if (createdSessionId) {
             setActive!({ session: createdSessionId})
-            router.back()
+            router.push("/(tabs)")
         }
     } catch (err) {
         console.error("OAuth error: ", err)

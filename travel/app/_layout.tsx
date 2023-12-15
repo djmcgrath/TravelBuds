@@ -72,21 +72,21 @@ function RootLayoutNav() {
   const segments = useSegments();
   const { isLoaded, isSignedIn } = useAuth()
 
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.replace('/login')
-    }
-  }, [isLoaded])
+  // useEffect(() => {
+  //   if (isLoaded && !isSignedIn) {
+  //     router.replace('/login')
+  //   }
+  // }, [isLoaded])
 
   useEffect(() => {
     if (!isLoaded) return;
 
-    const inTabsGroup = segments[0] === '(auth)';
+    const inTabsGroup = segments[0] === '(modals)';
 
     console.log('User changed: ', isSignedIn);
 
     if (isSignedIn && !inTabsGroup) {
-      router.replace('/group');
+      router.replace('/(tabs)/group');
     } else if (!isSignedIn) {
       router.replace('/login');
     }
@@ -102,7 +102,7 @@ function RootLayoutNav() {
             headerTitleStyle: {
               fontFamily: 'mon-sb',
             },
-            presentation: "modal", 
+            // presentation: "modal", 
             headerLeft: () => (
               <TouchableOpacity onPress={() => {router.push('/(tabs)')}}>
                 <Ionicons name="close-outline" size={28} />
