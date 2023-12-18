@@ -7,17 +7,7 @@ import { useUser } from '@clerk/clerk-expo'
 const Page = () => {
   const [group, setGroup] = useState([])
   const { user } = useUser();
-  const [firstName, setFirstName] = useState(user?.firstName);
-  const [lastName, setLastName] = useState(user?.lastName);
-
-  // Load user data on mount
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-    setFirstName(user.firstName);
-    setLastName(user.lastName);
-  }, [user]);
+  
   
 
     useEffect(() => {
@@ -26,16 +16,17 @@ const Page = () => {
       .then((data) => {setGroup(data)})
     }, [])
   
+    
     let groupList = group?.map((groupItem: any) => {
       return (
           <Text key={groupItem["id"]} style={styles.card}> {groupItem["group_name"]!}</Text>
       )
     })
-  
+
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
-            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {firstName} {lastName}</Text>
+            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {user?.firstName} {user?.lastName}</Text>
         </View>
         <ScrollView style={styles.container}>
           {groupList}

@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, useRouter, Slot, useSegments } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState} from 'react';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import { ClerkProvider, useAuth, useUser } from '@clerk/clerk-expo';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -70,6 +70,8 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const router = useRouter()
   const segments = useSegments();
+  const { user } = useUser()
+  const [userSt, setUserSt] = useState([])
   const { isLoaded, isSignedIn } = useAuth()
 
   // useEffect(() => {
@@ -77,6 +79,20 @@ function RootLayoutNav() {
   //     router.replace('/login')
   //   }
   // }, [isLoaded])
+
+  useEffect(() => {
+    fetch("http://localhost:5555/users", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "first_name": user?.firstName,
+            "last_name": user?.lastName
+        })
+    })
+    .then(res => res.json())
+    .then(data => setUserSt(data))
+  }, [isSignedIn])
+
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -91,6 +107,7 @@ function RootLayoutNav() {
       router.replace('/(tabs)');
     }
   }, [isSignedIn]);
+
 
   return (
       <Stack>
