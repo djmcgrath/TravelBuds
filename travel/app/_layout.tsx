@@ -81,14 +81,14 @@ function RootLayoutNav() {
   useEffect(() => {
     if (!isLoaded) return;
 
-    const inTabsGroup = segments[0] === '(modals)';
+    const inTabsGroup = segments[0] === '(tabs)';
 
     console.log('User changed: ', isSignedIn);
 
     if (isSignedIn && !inTabsGroup) {
-      router.replace('/(tabs)/group');
+      router.push('/(tabs)/user_group');
     } else if (!isSignedIn) {
-      router.replace('/login');
+      router.replace('/(tabs)');
     }
   }, [isSignedIn]);
 
