@@ -93,7 +93,6 @@ function RootLayoutNav() {
     .then(data => setUserSt(data))
   }, [isSignedIn])
 
-
   useEffect(() => {
     if (!isLoaded) return;
 

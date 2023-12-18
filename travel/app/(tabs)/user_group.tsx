@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
@@ -8,8 +8,6 @@ const Page = () => {
   const [group, setGroup] = useState([])
   const { user } = useUser();
   
-  
-
     useEffect(() => {
       fetch("http://localhost:5555/groups")
       .then((res) => res.json())
@@ -31,6 +29,10 @@ const Page = () => {
         <ScrollView style={styles.container}>
           {groupList}
         </ScrollView>
+        <TouchableOpacity>
+            <Text style={styles.title}> Create a New Group</Text>
+            
+        </TouchableOpacity>
       </SafeAreaView>
     )
   }
@@ -89,6 +91,11 @@ const Page = () => {
         alignItems: 'center',
         justifyContent: 'center',
         gap: 8,
+      },
+      title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
       },
     });
   
