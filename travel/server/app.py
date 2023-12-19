@@ -37,19 +37,23 @@ class Users(Resource):
     
     def post(self):
         data = request.get_json()
-        try:
-            new_user = User(
-                first_name = data["first_name"],
-                last_name = data["last_name"]
-            )
-            db.session.add(new_user)
-            db.session.commit()
+        print(data)
+        user = User.query.filter_by(first_name = data["first_name"]).first()
+        if not user:
+            try:
+                new_user = User(
+                    first_name = data["first_name"],
+                    last_name = data["last_name"]
+                )
+                db.session.add(new_user)
+                db.session.commit()
 
-            return new_user.to_dict(), 201
-        
-        except ValueError as e:
-            print(e.__str__())
-            return {"errors": ["validation errors"]}, 400
+                return new_user.to_dict(), 201
+            
+            except ValueError as e:
+                print(e.__str__())
+                return {"errors": ["validation errors"]}, 400
+        return user.to_dict(), 201
 
 api.add_resource(Users, "/users")
 

@@ -43,11 +43,17 @@ class User(db.Model, SerializerMixin):
 
     serialize_rules = ('-user_groups.users', "-follows.follower", "-followed_by.following", )
 
-    @validates("first_name", "last_name")
-    def validate_names(self, key, value):
-        if not value:
-            raise ValueError("You are missing a first or last name")
-        return value
+    @validates("first_name")
+    def validate_names(self, key, firstName):
+        if not firstName:
+            raise ValueError("You are missing a first name")
+        return firstName
+    
+    @validates("last_name")
+    def validate_names(self, key, lastName):
+        if not lastName:
+            raise ValueError("You are missing a last name")
+        return lastName
 
     def __repr__(self):
         return f'<User {self.id}>'

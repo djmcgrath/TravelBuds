@@ -77,17 +77,25 @@ function RootLayoutNav() {
 
 
   useEffect(() => {
-    fetch("http://localhost:5555/users", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            "first_name": user?.firstName,
-            "last_name": user?.lastName
+    if (isSignedIn) {
+      fetch('http://localhost:5555/users', {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+              "first_name": user?.firstName,
+              "last_name": user?.lastName
+          })
         })
-    })
-    .then(res => res.json())
-    .then(data => setUserSt(data))
-  }, [isSignedIn])
+        .then(res => res.json())
+        .then(data => {
+          console.log("Data:", data)
+          setUserSt(data)})
+    }
+  },[isSignedIn])
+      
+    
+    
+ 
 
   useEffect(() => {
     if (!isLoaded) return;

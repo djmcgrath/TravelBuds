@@ -23,12 +23,12 @@ const Page = () => {
       )
     })
 
-    
+    console.log(userSt)
 
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
-            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]} {userSt.id}</Text>
+            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
         <ScrollView style={styles.container}>
           {groupList}
