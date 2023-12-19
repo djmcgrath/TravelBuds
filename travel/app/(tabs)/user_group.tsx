@@ -14,7 +14,7 @@ const Page = () => {
       if(isSignedIn){
         fetch("http://localhost:5555/usergroups")
         .then((res) => res.json())
-        .then((data) => {setUserGroup(data[0])})
+        .then((data) => {setUserGroup(data)})
       }
     }, [isSignedIn])
   
@@ -26,15 +26,15 @@ const Page = () => {
     //   )
     // }): null
   
-    // console.log(groupList)
-
+    // console.log(userGroup!["groups"]["group_name"])
+    // const groupName = userGroup.groups.group_name
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
             <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
         <ScrollView style={styles.container}>
-          {userGroup[0]["group_name"]}
+          {/* <Text style={styles.card}>{groupName}</Text> */}
         </ScrollView>
         <TouchableOpacity>
             <Text style={styles.title}> Create a New Group</Text>
