@@ -5,6 +5,7 @@ import { useEffect, useState} from 'react';
 import { TouchableOpacity } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { ClerkProvider, useAuth, useUser } from '@clerk/clerk-expo';
+import useUserStore from '../storeStates/userState';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -71,14 +72,9 @@ function RootLayoutNav() {
   const router = useRouter()
   const segments = useSegments();
   const { user } = useUser()
-  const [userSt, setUserSt] = useState([])
+  const { setUserSt } = useUserStore()
   const { isLoaded, isSignedIn } = useAuth()
 
-  // useEffect(() => {
-  //   if (isLoaded && !isSignedIn) {
-  //     router.replace('/login')
-  //   }
-  // }, [isLoaded])
 
   useEffect(() => {
     fetch("http://localhost:5555/users", {

@@ -2,17 +2,19 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } fr
 import React, { useEffect, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
-import { useUser } from '@clerk/clerk-expo'
+import useUserStore from '../../storeStates/userState'
+import { useAuth } from '@clerk/clerk-expo'
 
 const Page = () => {
   const [group, setGroup] = useState([])
-  const { user } = useUser();
+  const { userSt } = useUserStore()
+  const { isSignedIn } = useAuth()
   
     useEffect(() => {
       fetch("http://localhost:5555/groups")
       .then((res) => res.json())
       .then((data) => {setGroup(data)})
-    }, [])
+    }, [isSignedIn])
   
     
     let groupList = group?.map((groupItem: any) => {
@@ -21,17 +23,19 @@ const Page = () => {
       )
     })
 
+    
+
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
-            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {user?.firstName} {user?.lastName}</Text>
+            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]} {userSt.id}</Text>
         </View>
         <ScrollView style={styles.container}>
           {groupList}
         </ScrollView>
         <TouchableOpacity>
             <Text style={styles.title}> Create a New Group</Text>
-            
+
         </TouchableOpacity>
       </SafeAreaView>
     )
