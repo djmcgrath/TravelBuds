@@ -37,7 +37,6 @@ class Users(Resource):
     
     def post(self):
         data = request.get_json()
-        print(data)
         user = User.query.filter_by(first_name = data["first_name"]).first()
         if not user:
             try:

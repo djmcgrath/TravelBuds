@@ -23,7 +23,6 @@ const Page = () => {
       )
     })
 
-    console.log(userSt)
 
     return (
       <SafeAreaView style={defaultStyles.container}>
