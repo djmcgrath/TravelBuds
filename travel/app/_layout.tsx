@@ -88,7 +88,6 @@ function RootLayoutNav() {
         })
         .then(res => res.json())
         .then(data => {
-          console.log("Data:", data)
           setUserSt(data)})
     }
   },[isSignedIn])

@@ -38,8 +38,14 @@ def seed_posts():
         posts.append(p)
     return posts
 
-        
-
+def seed_user_groups():
+    user_group = []
+    ug = UserGroup(
+        user_id = 6,
+        group_id = 4
+    )
+    user_group.append(ug)
+    return user_group
 
 
 if __name__ == '__main__':
@@ -57,6 +63,10 @@ if __name__ == '__main__':
             Post.query.delete()
         except:
             print("No Post")
+        try:
+            UserGroup.query.delete()
+        except:
+            print("No UserGroup")
 
         print("Seeding the users..")
         the_users = seed_users()
@@ -66,6 +76,11 @@ if __name__ == '__main__':
         print("Seeding the groups...")
         the_groups = seed_group()
         db.session.add_all(the_groups)
+        db.session.commit()
+
+        print("Seeding the user groups...")
+        the_user_groups = seed_user_groups()
+        db.session.add_all(the_user_groups)
         db.session.commit()
 
         print("Seeding the posts...")

@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
@@ -6,23 +6,27 @@ import useUserStore from '../../storeStates/userState'
 import { useAuth } from '@clerk/clerk-expo'
 
 const Page = () => {
-  const [group, setGroup] = useState([])
-  const { userSt } = useUserStore()
-  const { isSignedIn } = useAuth()
-  
+    const [userGroup, setUserGroup] = useState([])
+    const { userSt } = useUserStore()
+    const { isSignedIn } = useAuth()
+    
     useEffect(() => {
-      fetch("http://localhost:5555/groups")
-      .then((res) => res.json())
-      .then((data) => {setGroup(data)})
+      if(isSignedIn){
+        fetch("http://localhost:5555/usergroups")
+        .then((res) => res.json())
+        .then((data) => {setUserGroup(data[0])})
+      }
     }, [isSignedIn])
   
     
-    let groupList = group?.map((groupItem: any) => {
-      return (
-          <Text key={groupItem["id"]} style={styles.card}> {groupItem["group_name"]!}</Text>
-      )
-    })
-
+    // let groupList = userGroup?["groups"].map((groupItem) => {
+    //   return(
+    //     console.log(groupItem)
+    //     // <Text key={groupItem["id"]} style={styles.card}> {groupItem["group_name"]}</Text>
+    //   )
+    // }): null
+  
+    // console.log(groupList)
 
     return (
       <SafeAreaView style={defaultStyles.container}>
@@ -30,11 +34,10 @@ const Page = () => {
             <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
         <ScrollView style={styles.container}>
-          {groupList}
+          {userGroup[0]["group_name"]}
         </ScrollView>
         <TouchableOpacity>
             <Text style={styles.title}> Create a New Group</Text>
-
         </TouchableOpacity>
       </SafeAreaView>
     )
