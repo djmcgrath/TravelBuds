@@ -104,10 +104,10 @@ api.add_resource(UserGroups, "/usergroups")
 
 class UserGroupsById(Resource):
     def get(self, id):
-        user_group = UserGroup.query.filter_by(id = id).first()
-        if not user_group:
+        user_group = UserGroup.query.filter_by(user_id = id).all()
+        if len(user_group)==0:
             return {"error": "User Group not found"}, 404
-        return [user_group.to_dict()], 200
+        return user_group.to_dict(), 200
     
     def patch(self, id):
         user_group = UserGroup.query.filter_by(id = id).first()

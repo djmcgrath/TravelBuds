@@ -41,11 +41,21 @@ def seed_posts():
 
 def seed_user_groups():
     user_group = []
-    ug = UserGroup(
+    ug1 = UserGroup(
         user_id = 6,
         group_id = 4
     )
-    user_group.append(ug)
+    ug2 = UserGroup(
+        user_id = 6,
+        group_id = 3
+    )
+    ug3 = UserGroup(
+        user_id = 6,
+        group_id = 3
+    )
+    user_group.append(ug1)
+    user_group.append(ug2)
+    user_group.append(ug3)
     return user_group
 
 

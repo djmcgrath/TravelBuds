@@ -4,37 +4,47 @@ import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
 import useUserStore from '../../storeStates/userState'
 import { useAuth } from '@clerk/clerk-expo'
+import { useRouter } from 'expo-router'
 
 const Page = () => {
     const { userSt } = useUserStore()
     const { isSignedIn } = useAuth()
-    const [userGroup, setUserGroup] = useState([])
+    const router = useRouter()
+    const {setUserPost} = useUserStore()
 
-    console.log(userSt)
+    // console.log("User Info:", userSt.user_groups[0].groups.posts.body)
     
-    useEffect(() => {
-      if(userSt.user_groups.length > 0){
-        if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
-          fetch(`http://localhost:5555/usergroups/${userSt.user_groups[0].id}`)
-          .then((res) => res.json())
-          .then((data) => {
-            console.log("USER GROUPS:", data)
-            setUserGroup(data)
-          })
-          .catch((error) => {
-            console.error('Error:', error)
-          })
-        }
-      }
-    }, [isSignedIn])
+    // useEffect(() => {
+    //   if(userSt.user_groups.length > 0){
+    //     if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
+    //       fetch(`http://localhost:5555/usergroups/${userSt.id}`)
+    //       .then((res) => res.json())
+    //       .then((data) => {
+    //         console.log("USER GROUPS:", data)
+    //         setUserGroup(data)
+    //       })
+    //       .catch((error) => {
+    //         console.error('Error:', error)
+    //       })
+    //     }
+    //   }
+    // }, [isSignedIn])
+    // {() => {router.push('/(tabs)/group')}}
 
+    function goToPosts (item) {
+      setUserPost(item.groups.posts)
+      router.push('/(tabs)/group')
+    }
   
     function handleGroupNameList () {
       if (userSt.user_groups.length > 0){
-        if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
-          let groupName = userGroup.map((item) => {
+        if(isSignedIn ){
+          let groupName = userSt.user_groups.map((item) => {
               return (
-                <Text style={styles.card}>{item.groups.group_name}</Text>
+                // console.log("item:", item)
+                <TouchableOpacity onPress={() => goToPosts(item)}>
+                  <Text style={styles.card}>{item.groups.group_name}</Text>
+                </TouchableOpacity>
               )
             })
         return groupName
@@ -56,9 +66,10 @@ const Page = () => {
         <ScrollView style={styles.container}>
           {handleGroupNameList()}
         </ScrollView>
-        <TouchableOpacity>
+        {/* <View>
             <Text style={styles.title}> Create a New Group</Text>
-        </TouchableOpacity>
+            <TextInput />
+        </View> */}
       </SafeAreaView>
     )
   }
