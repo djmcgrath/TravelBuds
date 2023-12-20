@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
@@ -10,23 +10,22 @@ const Page = () => {
     const { userSt } = useUserStore()
     const { isSignedIn } = useAuth()
     const router = useRouter()
-    const {setUserPost} = useUserStore()
+    const { setUserPost } = useUserStore()
+    const { setUserGroup } = useUserStore()
 
     // console.log("User Info:", userSt.user_groups[0].groups.posts.body)
     
     // useEffect(() => {
-    //   if(userSt.user_groups.length > 0){
-    //     if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
-    //       fetch(`http://localhost:5555/usergroups/${userSt.id}`)
-    //       .then((res) => res.json())
-    //       .then((data) => {
-    //         console.log("USER GROUPS:", data)
-    //         setUserGroup(data)
-    //       })
-    //       .catch((error) => {
-    //         console.error('Error:', error)
-    //       })
-    //     }
+    //   if(isSignedIn){
+    //     fetch("http://localhost:5555/usergroups", {
+    //       method: "POST",
+    //       headers: {"Content-Type": "application/json"},
+    //       body: JSON.stringify({})
+    //     })
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       setUserGroup(data)
+    //     })
     //   }
     // }, [isSignedIn])
     // {() => {router.push('/(tabs)/group')}}
@@ -66,10 +65,14 @@ const Page = () => {
         <ScrollView style={styles.container}>
           {handleGroupNameList()}
         </ScrollView>
-        {/* <View>
+        <View style={{gap: 10}}>
             <Text style={styles.title}> Create a New Group</Text>
-            <TextInput />
-        </View> */}
+            <TextInput  placeholder="put stuff here"  style={defaultStyles.inputField} />
+            <TextInput placeholder="put other stuff here" style={defaultStyles.inputField} />
+            <TouchableOpacity style={styles.btnOutlineClerk}>
+                <Text style={styles.btnOutlineText}>Add New Group</Text>
+            </TouchableOpacity>
+        </View>
       </SafeAreaView>
     )
   }
@@ -134,6 +137,22 @@ const Page = () => {
         fontWeight: 'bold',
         marginBottom: 20,
       },
+      btnOutlineClerk: {
+        backgroundColor: "#C71585",
+        borderWidth: 1,
+        borderColor: Colors.grey,
+        height: 50,
+        borderRadius: 8,
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+    },
+    btnOutlineText: {
+        color: "#000",
+        fontSize: 16,
+        fontFamily: "mon-sb",
+    },
     });
   
 
