@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 4d8fe74abf8f
+Revision ID: 507017219724
 Revises: 
-Create Date: 2023-12-19 14:33:03.625245
+Create Date: 2023-12-20 09:12:00.104825
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4d8fe74abf8f'
+revision = '507017219724'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,7 +30,6 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=True),
     sa.Column('last_name', sa.String(), nullable=True),
-    sa.Column('group_leader', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.PrimaryKeyConstraint('id', name=op.f('pk_user'))
     )
@@ -53,7 +52,6 @@ def upgrade():
     )
     op.create_table('user_group',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_group_number', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('group_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),

@@ -107,7 +107,7 @@ class UserGroupsById(Resource):
         user_group = UserGroup.query.filter_by(id = id).first()
         if not user_group:
             return {"error": "User Group not found"}, 404
-        return user_group.to_dict(), 200
+        return [user_group.to_dict()], 200
     
     def patch(self, id):
         user_group = UserGroup.query.filter_by(id = id).first()

@@ -13,16 +13,17 @@ def seed_users():
         u = User(
             first_name = fake.first_name(),
             last_name = fake.last_name(),
-            group_leader = fake.boolean(chance_of_getting_true=25)
+            # group_leader = fake.boolean(chance_of_getting_true=25)
         )
         users.append(u)
     return users
 
 def seed_group():
     groups = []
-    for _ in range(5):
+    for _ in range(4):
         g = Group(
-            group_name = fake.company()
+            group_name = fake.company(),
+            post_id =  fake.random_int(min=1, max=4)
         )
         groups.append(g)
     return groups

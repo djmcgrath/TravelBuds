@@ -6,35 +6,55 @@ import useUserStore from '../../storeStates/userState'
 import { useAuth } from '@clerk/clerk-expo'
 
 const Page = () => {
-    const [userGroup, setUserGroup] = useState([])
     const { userSt } = useUserStore()
     const { isSignedIn } = useAuth()
+    const [userGroup, setUserGroup] = useState([])
+
+    console.log(userSt)
     
     useEffect(() => {
-      if(isSignedIn){
-        fetch("http://localhost:5555/usergroups")
-        .then((res) => res.json())
-        .then((data) => {setUserGroup(data)})
+      if(userSt.user_groups.length > 0){
+        if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
+          fetch(`http://localhost:5555/usergroups/${userSt.user_groups[0].id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("USER GROUPS:", data)
+            setUserGroup(data)
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+          })
+        }
       }
     }, [isSignedIn])
+
   
+    function handleGroupNameList () {
+      if (userSt.user_groups.length > 0){
+        if(isSignedIn && userSt.user_groups[0].user_id === userSt.id){
+          let groupName = userGroup.map((item) => {
+              return (
+                <Text style={styles.card}>{item.groups.group_name}</Text>
+              )
+            })
+        return groupName
+        } 
+      } else {
+          return (
+            <Text style={styles.card}>You don't have a Group. Make one below.</Text>
+          )
+        }
+      }
     
-    // let groupList = userGroup?["groups"].map((groupItem) => {
-    //   return(
-    //     console.log(groupItem)
-    //     // <Text key={groupItem["id"]} style={styles.card}> {groupItem["group_name"]}</Text>
-    //   )
-    // }): null
-  
-    // console.log(userGroup!["groups"]["group_name"])
-    // const groupName = userGroup.groups.group_name
+    
+    
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
             <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
         <ScrollView style={styles.container}>
-          {/* <Text style={styles.card}>{groupName}</Text> */}
+          {handleGroupNameList()}
         </ScrollView>
         <TouchableOpacity>
             <Text style={styles.title}> Create a New Group</Text>

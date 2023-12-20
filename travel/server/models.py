@@ -34,7 +34,7 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
-    group_leader = db.Column(db.Boolean)
+    # group_leader = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     user_groups = db.relationship("UserGroup", back_populates="users")
@@ -61,7 +61,7 @@ class User(db.Model, SerializerMixin):
 class UserGroup(db.Model, SerializerMixin):
     __tablename__ = "user_group"
     id = db.Column(db.Integer, primary_key=True)
-    user_group_number = db.Column(db.Integer)
+    # user_group_number = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
     group_id = db.Column(db.Integer, db.ForeignKey("group.id"), nullable=True)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
