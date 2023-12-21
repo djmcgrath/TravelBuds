@@ -92,9 +92,6 @@ function RootLayoutNav() {
     }
   },[isSignedIn])
       
-    
-    
- 
 
   useEffect(() => {
     if (!isLoaded) return;

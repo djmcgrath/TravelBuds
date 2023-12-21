@@ -5,10 +5,9 @@ import {
   ScrollView, 
   StyleSheet, 
   TouchableOpacity, 
-  TextInput, 
-  Pressable, 
-  Button } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+  TextInput,
+  RefreshControl } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
 import useUserStore from '../../storeStates/userState'
@@ -24,8 +23,6 @@ const Page = () => {
     const { userGroup, setUserGroup } = useUserStore()
     const [form, setForm] = useState("")
     const [patchForm, setPatchForm] = useState("")
-    // const [edit, setEdit] = useState(false)
-
     
 
     
@@ -46,7 +43,7 @@ const Page = () => {
       }
     }
 
-    function handleGroupPatch (item) {
+    function handleGroupPatch (item: { groups: { id: any } }) {
       if(isSignedIn){
         fetch(`http://localhost:5555/groups/${item.groups.id}`, {
           method: "PATCH",
@@ -62,7 +59,7 @@ const Page = () => {
       }
     }
 
-    function handleGroupDelete (item) {
+    function handleGroupDelete (item: { groups: any }) {
       if(isSignedIn){
         fetch(`http://localhost:5555/groups/${item.groups.id}`, {
           method: "DELETE"
@@ -75,21 +72,28 @@ const Page = () => {
     }
     
 
-    function goToPosts (item) {
-      setUserPost(item.groups.posts)
-      router.push('/(tabs)/group')
+    function goToPosts (item: { groups: { posts: any } }) {
+      if (item.groups.posts === null) {
+        router.push('/(tabs)/group')
+      } else {
+        setUserPost(item.groups.posts)
+        router.push('/(tabs)/group')
+      }
+      
     }
   
     function handleGroupNameList () {
       if (userSt.user_groups.length > 0){
         if(isSignedIn ){
-          let groupName = userSt.user_groups.map((item) => {
+          let groupName = userSt.user_groups.map((item: { groups: any }) => {
             const [edit, setEdit] = useState(false)
               return (
-                <TouchableOpacity onPress={() => goToPosts(item)}>
+                <View>
                   {!edit && (
                     <View style={styles.editRow}>
-                      <Text style={styles.card}>{item.groups.group_name} </Text>
+                      <TouchableOpacity onPress={() => goToPosts(item)}>
+                        <Text style={styles.card}>{item.groups.group_name} </Text>
+                      </TouchableOpacity>
                       <TouchableOpacity onPress={() => setEdit(true)}>
                         <Ionicons name="create-outline" size={24} color={Colors.dark} />
                       </TouchableOpacity>
@@ -112,7 +116,7 @@ const Page = () => {
                       </TouchableOpacity>
                     </View>
                   )}
-                </TouchableOpacity>
+                </View>
               )
             })
         return groupName
@@ -129,22 +133,22 @@ const Page = () => {
     return (
       <SafeAreaView style={defaultStyles.container}>
         <View>
-            <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
+          <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
         <ScrollView style={styles.container} >
           {handleGroupNameList()}
         </ScrollView>
         <View style={{gap: 10}}>
-            <Text style={styles.title}> Create a New Group</Text>
-            <TextInput  
-              placeholder="Group name"  
-              value={form}
-              style={defaultStyles.inputField}
-              onChangeText={setForm} 
-            />
-            <TouchableOpacity style={styles.btnOutlineClerk} onPress={() => handleGroupPost()} >
-                <Text style={styles.btnOutlineText}>Add New Group</Text>
-            </TouchableOpacity>
+          <Text style={styles.title}> Create a New Group</Text>
+          <TextInput  
+            placeholder="Group name"  
+            value={form}
+            style={defaultStyles.inputField}
+            onChangeText={setForm} 
+          />
+          <TouchableOpacity style={styles.btnOutlineClerk} onPress={() => handleGroupPost()} >
+              <Text style={styles.btnOutlineText}>Add New Group</Text>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     )
