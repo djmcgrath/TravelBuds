@@ -1,34 +1,79 @@
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { 
+  View, 
+  Text, 
+  SafeAreaView, 
+  ScrollView, 
+  StyleSheet, 
+  TouchableOpacity, 
+  TextInput, 
+  Pressable, 
+  Button } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { defaultStyles } from '../../constants/Styles'
 import Colors from '../../constants/Colors'
 import useUserStore from '../../storeStates/userState'
 import { useAuth } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 
 const Page = () => {
     const { userSt } = useUserStore()
     const { isSignedIn } = useAuth()
     const router = useRouter()
     const { setUserPost } = useUserStore()
-    const { setUserGroup } = useUserStore()
+    const { userGroup, setUserGroup } = useUserStore()
+    const [form, setForm] = useState("")
+    const [patchForm, setPatchForm] = useState("")
+    // const [edit, setEdit] = useState(false)
 
-    // console.log("User Info:", userSt.user_groups[0].groups.posts.body)
     
-    // useEffect(() => {
-    //   if(isSignedIn){
-    //     fetch("http://localhost:5555/usergroups", {
-    //       method: "POST",
-    //       headers: {"Content-Type": "application/json"},
-    //       body: JSON.stringify({})
-    //     })
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       setUserGroup(data)
-    //     })
-    //   }
-    // }, [isSignedIn])
-    // {() => {router.push('/(tabs)/group')}}
+
+    
+    const handleGroupPost = async () => {
+      if(isSignedIn){
+        fetch("http://localhost:5555/groups", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            group_name: form,
+            user_id: userSt.id
+          })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserGroup(data)
+        })
+      }
+    }
+
+    function handleGroupPatch (item) {
+      if(isSignedIn){
+        fetch(`http://localhost:5555/groups/${item.groups.id}`, {
+          method: "PATCH",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            group_name: patchForm,
+          })
+        })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserGroup(data)
+        })
+      }
+    }
+
+    function handleGroupDelete (item) {
+      if(isSignedIn){
+        fetch(`http://localhost:5555/groups/${item.groups.id}`, {
+          method: "DELETE"
+        })
+        .then(res => res.json())
+        .then((data) => {
+          setUserGroup(data)
+        })
+      }
+    }
+    
 
     function goToPosts (item) {
       setUserPost(item.groups.posts)
@@ -39,10 +84,34 @@ const Page = () => {
       if (userSt.user_groups.length > 0){
         if(isSignedIn ){
           let groupName = userSt.user_groups.map((item) => {
+            const [edit, setEdit] = useState(false)
               return (
-                // console.log("item:", item)
                 <TouchableOpacity onPress={() => goToPosts(item)}>
-                  <Text style={styles.card}>{item.groups.group_name}</Text>
+                  {!edit && (
+                    <View style={styles.editRow}>
+                      <Text style={styles.card}>{item.groups.group_name} </Text>
+                      <TouchableOpacity onPress={() => setEdit(true)}>
+                        <Ionicons name="create-outline" size={24} color={Colors.dark} />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleGroupDelete(item)}>
+                        <MaterialCommunityIcons name="delete" size={24} color={Colors.dark} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                  {edit && (
+                    <View style={styles.editRow}>
+                      <TextInput
+                        key={item.groups.id}
+                        placeholder="First Name"
+                        value={patchForm}
+                        onChangeText={setPatchForm}
+                        style={[defaultStyles.inputField, { width: 100 }]}
+                      />
+                      <TouchableOpacity onPress={() =>{ handleGroupPatch(item); setEdit(false)}}>
+                        <Ionicons name="checkmark-outline" size={24} color={Colors.dark} />
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </TouchableOpacity>
               )
             })
@@ -62,14 +131,18 @@ const Page = () => {
         <View>
             <Text style={{ fontSize: 25, textAlign: "center", fontFamily: "mon-sb"}}>Welcome {userSt["first_name"]} {userSt["last_name"]}</Text>
         </View>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} >
           {handleGroupNameList()}
         </ScrollView>
         <View style={{gap: 10}}>
             <Text style={styles.title}> Create a New Group</Text>
-            <TextInput  placeholder="put stuff here"  style={defaultStyles.inputField} />
-            <TextInput placeholder="put other stuff here" style={defaultStyles.inputField} />
-            <TouchableOpacity style={styles.btnOutlineClerk}>
+            <TextInput  
+              placeholder="Group name"  
+              value={form}
+              style={defaultStyles.inputField}
+              onChangeText={setForm} 
+            />
+            <TouchableOpacity style={styles.btnOutlineClerk} onPress={() => handleGroupPost()} >
                 <Text style={styles.btnOutlineText}>Add New Group</Text>
             </TouchableOpacity>
         </View>
@@ -116,8 +189,9 @@ const Page = () => {
         },
         alignItems: 'center',
         gap: 14,
-        marginBottom: 24,
-        fontFamily: "mon"
+        marginBottom: 2,
+        fontFamily: "mon",
+        flexDirection: "row",
       },
       avatar: {
         width: 100,
@@ -127,6 +201,7 @@ const Page = () => {
       },
       editRow: {
         flex: 1,
+        padding: 24,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -152,6 +227,19 @@ const Page = () => {
         color: "#000",
         fontSize: 16,
         fontFamily: "mon-sb",
+    },
+    deletebtn: {
+      backgroundColor: "#C71585",
+      borderWidth: 1,
+      borderColor: Colors.grey,
+      height: 40,
+      borderRadius: 8,
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      padding: 2,
+      marginHorizontal: 24,
+      marginTop: 0,
     },
     });
   

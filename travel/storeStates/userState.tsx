@@ -15,7 +15,7 @@ interface UserStore {
     userPost: [],
     setUserPost: (userPost) => set(() => ({ userPost })),
     userGroup: [],
-    setUserGroup: (userPost) => set(() => ({ userPost })),
+    setUserGroup: (userGroup) => set(() => ({ userGroup })),
    }));
 
 export default useUserStore

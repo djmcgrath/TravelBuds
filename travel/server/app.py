@@ -1,5 +1,5 @@
 # Remote library imports
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
@@ -31,6 +31,7 @@ api = Api(app)
 CORS(app)
 
 class Users(Resource):
+
     def get(self):
         user_list = [users.to_dict(rules =("-followed_by", "-follows", "-user_groups", "-created_at",)) for users in User.query.all()]
         return user_list, 200
@@ -90,7 +91,8 @@ class UserGroups(Resource):
         data = request.get_json()
         try:
             new_user_group = UserGroup(
-                user_group_number = data["user_group_number"],
+                user_id = data["user_id"],
+                group_id = data["group_id"]
             )
             db.session.add(new_user_group)
             db.session.commit()
@@ -134,13 +136,17 @@ class Groups(Resource):
     
     def post(self):
         data = request.get_json()
+        user = data["user_id"]
         try:
             new_group = Group(
                 group_name = data["group_name"],
             )
             db.session.add(new_group)
             db.session.commit()
-
+            user_group = UserGroup(group_id = new_group.id, user_id = user)
+            print(user_group)
+            db.session.add(user_group)
+            db.session.commit()
             return new_group.to_dict(), 201
         
         except ValueError as e:
@@ -174,9 +180,12 @@ class GroupsById(Resource):
         
     def delete(self, id):
         group = Group.query.filter_by(id = id).first()
+        usergroup = UserGroup.query.filter_by(group_id = group.id).first()
         if not group:
             return {"error": "Group not found"}, 404
         db.session.delete(group)
+        db.session.commit()
+        db.session.delete(usergroup)
         db.session.commit()
 
         return "", 204
