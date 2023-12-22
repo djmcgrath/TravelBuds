@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { defaultStyles } from '../../constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../constants/Colors';
 import { Link, router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -71,6 +71,7 @@ const Page = () => {
     <SafeAreaView style={defaultStyles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Profile</Text>
+        <MaterialCommunityIcons style={{marginRight: 50}} name='airplane-takeoff' size={40} />
         <Ionicons name="notifications-outline" size={26} />
       </View>
 

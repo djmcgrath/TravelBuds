@@ -17,6 +17,7 @@ const Page = () => {
 //     )
 //   })
 
+    
   return (
     <SafeAreaView style={defaultStyles.container}>
         <View>

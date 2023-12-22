@@ -14,15 +14,17 @@ import useUserStore from '../../storeStates/userState'
 import { useAuth } from '@clerk/clerk-expo'
 import { useRouter } from 'expo-router'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
+import useUniversalRefresh from '../../storeStates/universalRefresh'
 
 const Page = () => {
     const { userSt } = useUserStore()
     const { isSignedIn } = useAuth()
     const router = useRouter()
     const { setUserPost } = useUserStore()
-    const { userGroup, setUserGroup } = useUserStore()
+    const { setUserGroup } = useUserStore()
     const [form, setForm] = useState("")
     const [patchForm, setPatchForm] = useState("")
+    const { state, changeState } = useUniversalRefresh()
     
 
     
@@ -39,6 +41,7 @@ const Page = () => {
         .then((res) => res.json())
         .then((data) => {
           setUserGroup(data)
+          changeState()
         })
       }
     }
@@ -55,11 +58,12 @@ const Page = () => {
         .then((res) => res.json())
         .then((data) => {
           setUserGroup(data)
+          changeState()
         })
       }
     }
 
-    function handleGroupDelete (item: { groups: any }) {
+    function handleGroupDelete (item) {
       if(isSignedIn){
         fetch(`http://localhost:5555/groups/${item.groups.id}`, {
           method: "DELETE"
@@ -67,12 +71,13 @@ const Page = () => {
         .then(res => res.json())
         .then((data) => {
           setUserGroup(data)
+          changeState()
         })
       }
     }
     
 
-    function goToPosts (item: { groups: { posts: any } }) {
+    function goToPosts (item) {
       if (item.groups.posts === null) {
         router.push('/(tabs)/group')
       } else {
@@ -85,7 +90,7 @@ const Page = () => {
     function handleGroupNameList () {
       if (userSt.user_groups.length > 0){
         if(isSignedIn ){
-          let groupName = userSt.user_groups.map((item: { groups: any }) => {
+          let groupName = userSt.user_groups.map((item) => {
             const [edit, setEdit] = useState(false)
               return (
                 <View>
@@ -123,7 +128,9 @@ const Page = () => {
         } 
       } else {
           return (
-            <Text style={styles.card}>You don't have a Group. Make one below.</Text>
+            <ScrollView>
+              <Text style={styles.card}>You don't have a Group. Make one below.</Text>
+            </ScrollView>
           )
         }
       }

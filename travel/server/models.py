@@ -94,7 +94,7 @@ class Post(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     body = db.Column(db.String)
-    liker = db.Column(db.Integer)
+    # liker = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     group_post = db.relationship("Group", back_populates="posts")
