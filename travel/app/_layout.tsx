@@ -75,12 +75,13 @@ function RootLayoutNav() {
   const { setUserSt } = useUserStore()
   const { isLoaded, isSignedIn } = useAuth()
 
-
   useEffect(() => {
     if (isSignedIn) {
       fetch('http://localhost:5555/users', {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"},
           body: JSON.stringify({
               "first_name": user?.firstName,
               "last_name": user?.lastName

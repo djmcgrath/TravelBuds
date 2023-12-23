@@ -34,7 +34,7 @@ def seed_posts():
         p = Post(
             title = fake.street_name(),
             body = fake.address(),
-            liker = fake.random_digit()
+            # liker = fake.random_digit()
         )
         posts.append(p)
     return posts

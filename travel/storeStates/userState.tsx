@@ -5,8 +5,6 @@ interface UserStore {
     setUserSt: (userSt: any) => void;
     userPost: any;
     setUserPost: (userSt: any) => void;
-    userGroup: any;
-    setUserGroup: (userSt: any) => void;
    }
    
    const useUserStore = create<UserStore>((set) => ({
@@ -14,8 +12,6 @@ interface UserStore {
     setUserSt: (userSt) => set(() => ({ userSt })),
     userPost: [],
     setUserPost: (userPost) => set(() => ({ userPost })),
-    userGroup: [],
-    setUserGroup: (userGroup) => set(() => ({ userGroup })),
    }));
 
 export default useUserStore

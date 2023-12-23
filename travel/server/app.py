@@ -203,7 +203,7 @@ class Posts(Resource):
             new_post = Post(
                 title = data["title"],
                 body = data["body"],
-                liker = data["liker"],
+                # liker = data["liker"],
             )
             db.session.add(new_post)
             db.session.commit()

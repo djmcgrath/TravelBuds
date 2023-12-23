@@ -21,18 +21,19 @@ const Page = () => {
     const { isSignedIn } = useAuth()
     const router = useRouter()
     const { setUserPost } = useUserStore()
-    const { setUserGroup } = useUserStore()
     const [form, setForm] = useState("")
     const [patchForm, setPatchForm] = useState("")
     const { state, changeState } = useUniversalRefresh()
     
-
+    console.log("Just Checking:", userSt)
     
     const handleGroupPost = async () => {
       if(isSignedIn){
         fetch("http://localhost:5555/groups", {
           method: "POST",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"},
           body: JSON.stringify({
             group_name: form,
             user_id: userSt.id
@@ -40,7 +41,7 @@ const Page = () => {
         })
         .then((res) => res.json())
         .then((data) => {
-          setUserGroup(data)
+          setUserPost(data)
           changeState()
         })
       }
@@ -50,14 +51,16 @@ const Page = () => {
       if(isSignedIn){
         fetch(`http://localhost:5555/groups/${item.groups.id}`, {
           method: "PATCH",
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"},
           body: JSON.stringify({
             group_name: patchForm,
           })
         })
         .then((res) => res.json())
         .then((data) => {
-          setUserGroup(data)
+          setUserPost(data)
           changeState()
         })
       }
@@ -70,7 +73,7 @@ const Page = () => {
         })
         .then(res => res.json())
         .then((data) => {
-          setUserGroup(data)
+          setUserPost(data)
           changeState()
         })
       }
@@ -88,10 +91,9 @@ const Page = () => {
     }
   
     function handleGroupNameList () {
-      if (userSt.user_groups.length > 0){
-        if(isSignedIn ){
+      const [edit, setEdit] = useState(false)
+        if(isSignedIn && userSt.user_groups.length > 0 ){
           let groupName = userSt.user_groups.map((item) => {
-            const [edit, setEdit] = useState(false)
               return (
                 <View>
                   {!edit && (
@@ -125,8 +127,7 @@ const Page = () => {
               )
             })
         return groupName
-        } 
-      } else {
+        } else {
           return (
             <ScrollView>
               <Text style={styles.card}>You don't have a Group. Make one below.</Text>
